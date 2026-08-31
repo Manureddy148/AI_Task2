@@ -1,0 +1,5 @@
+tiktoken==0.14.0
+transformers==5.16.1
+regex==2026.8.31
+indic-transliteration==2.3.82
+matplotlib==3.11.0

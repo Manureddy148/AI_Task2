@@ -1,0 +1,3 @@
+# No newline conversion anywhere: the corpus files are hash-pinned (verify.py)
+# and token counts are byte-sensitive; a CRLF checkout would break both.
+* -text
