@@ -66,8 +66,9 @@ statements about its own work.
 
 ## What the candidate must do before submitting (defense prep checklist)
 
-The defense is the candidate's, not the AI's. The minimum honest preparation,
-each item minutes long:
+The defense is the candidate's, not the AI's. **`python submission/defense_drill.py`
+walks every item below interactively (~10 minutes)** — it runs the real commands
+and shows expected vs actual; the understanding it builds is the deliverable:
 
 - [ ] run `python submission/verify.py` yourself and read what each PASS means
 - [ ] re-run the A0 repro command from `partA/audit/repro_v0.md`

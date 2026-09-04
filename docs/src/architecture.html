@@ -5,7 +5,8 @@
 
 <h1>The Audit — System Architecture</h1>
 <p class="sub">Audit of an intern's tokenizer-fertility &amp; serving-capacity report (REPORT_v0) before leadership
-routing/capacity decisions &nbsp;·&nbsp; repo: <span class="mono">github.com/Manureddy148/AI_Task2</span> &nbsp;·&nbsp; 2026-08-31</p>
+routing/capacity decisions &nbsp;·&nbsp; repo: <span class="mono">github.com/Manureddy148/AI_Task2</span> &nbsp;·&nbsp;
+audit 2026-08-31, docs compiled 2026-09-04</p>
 
 <h2>1 &nbsp;What is audited, and what the audit ships</h2>
 <p>REPORT_v0 makes two families of claims: <strong>§1</strong> "Hindi costs ~6× English per token-word; the two metrics
@@ -64,7 +65,7 @@ constant. Words, graphemes, code points and bytes all fail in different directio
   honest goodput 201 tok/s, corroborated independently via n/itl and the roofline.</div>
   <div class="arrow">→</div>
   <div class="box"><span class="tag t-orange">Roofline</span><strong>Mechanism closed</strong><br>
-  One 65% MBU parameter fits all 13 ITLs within ±2.8%; decode memory-bound 40× → prices both fixes
+  One 65% MBU parameter fits all 13 ITLs within ±2.8%; decode memory-bound ~38× → prices both fixes
   (max_num_seqs=24; fp8-KV 2× capacity).</div>
 </div>
 <p>The reconciliation doubles as instrument calibration: it also settles that the stack's "24 GB" is decimal
@@ -113,8 +114,8 @@ multi-agent workflow:</p>
   <div class="box"><span class="tag t-green">Fix</span><strong>Close the loop</strong><br>
   All 30 fixed; harness extended 40 → 50 checks; full re-verification green; committed &amp; pushed.</div>
 </div>
-<p>59 agents, ~3.3M tokens, 784 tool calls. The findings and their fixes are themselves documented evidence
-(<span class="mono">docs/INCIDENTS.pdf</span>, NOTEBOOK round 3).</p>
+<p>59 agents, ~3.3M subagent tokens, 784 tool calls (scale logged in NOTEBOOK round 4). The findings and their
+fixes are themselves documented evidence (<span class="mono">docs/INCIDENTS.pdf</span>, NOTEBOOK rounds 3–4).</p>
 
 <h2>7 &nbsp;Repository map</h2>
 <pre>submission/

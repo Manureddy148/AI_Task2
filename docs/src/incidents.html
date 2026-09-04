@@ -5,8 +5,8 @@
 
 <h1>What Broke, and How It Got Fixed</h1>
 <p class="sub">Incident log of an audited audit — every failure, its root cause, its fix, and how the fix was
-verified &nbsp;·&nbsp; one working session, 2026-08-31, 15:20–18:51 (+ documentation pass) &nbsp;·&nbsp;
-canonical chronological source: <span class="mono">submission/NOTEBOOK.md</span></p>
+verified &nbsp;·&nbsp; rounds 1–3: 2026-08-31 (15:20–18:53) · documentation &amp; release-gate pass: 2026-09-04
+&nbsp;·&nbsp; canonical chronological source: <span class="mono">submission/NOTEBOOK.md</span> (rounds 1–4)</p>
 
 <p class="box"><strong>Why this document exists.</strong> The assignment scores unverified claims negatively and
 auto-fails fabricated evidence. So this log is deliberately honest: the work was AI-heavy under human direction,
@@ -18,25 +18,25 @@ review of the submission itself. Nothing below is dramatized; each row traces to
 <h2>Round 1 (15:20–15:46) — building the audit, catching my own hands</h2>
 <table>
 <tr><th style="width:22%">Incident</th><th style="width:26%">Root cause</th><th style="width:28%">Fix</th><th>Verified by</th></tr>
-<tr><td>FLORES extractor died with <span class="mono">KeyError</span></td><td>Assumed tarball member paths; real members carry a <span class="mono">./</span> prefix</td><td>Listed members first, corrected the path</td><td>7 languages × 1012 lines extracted; SHA-256 pins recorded</td></tr>
-<tr><td>NFC hypothesis wrong — twice</td><td>Predicted nukta decomposition would shift toy numbers (it didn't: 0.00%); then assumed no-op generalizes (it doesn't: 93 hin / 609 ben FLORES lines change)</td><td>Kept the intern's NFC call, upgraded verdict from "harmless" to "actively useful", measured its effect (≤+0.5%)</td><td>E4 all-zero deltas; NFC table in results_tables.md</td></tr>
+<tr><td>FLORES extractor died with <span class="mono">KeyError</span></td><td>Assumed tarball member paths; real members carry a <span class="mono">./</span> prefix</td><td>Listed members first, corrected the path</td><td>5 languages × 1012 lines extracted (extended to 7 in round 2); SHA-256 pins recorded</td></tr>
+<tr><td>NFC hypothesis wrong — twice</td><td>Predicted nukta decomposition would shift toy numbers (it didn't: 0.00%); then assumed no-op generalizes (it doesn't: 93 hin / 609 ben FLORES lines change)</td><td>Kept the intern's NFC call, upgraded verdict from "harmless" to "actively useful", measured its effect (≤+0.51%, ben)</td><td>E4 all-zero deltas; NFC table in results_tables.md</td></tr>
 <tr><td><span class="mono">lower()</span> bug direction assumed backwards</td><td>Intuition said the bug made Hindi look worse; measurement says it inflates only English fertility</td><td>Claim written from the measurement, not the intuition</td><td>E2: hin bit-identical, ratio +2.92%</td></tr>
 <tr><td>Two rounded-table arithmetic errors in draft docs (18.55 vs 18.48; +23% vs +29%)</td><td>Deriving ratios from 2-decimal display values</td><td>Re-derived every quoted figure from full-precision CSV before finalizing</td><td>Later formalized as verify.py assertions</td></tr>
 <tr><td>Notebook timestamps ran ahead of the wall clock</td><td>Reconstructed a plausible timeline instead of recording the real one</td><td>Checked <span class="mono">Get-Date</span>, corrected every stamp, logged the slip in the notebook itself</td><td>NOTEBOOK entry 15:46</td></tr>
 </table>
 
-<h2>Round 2 (~15:50–16:30) — after the operator rejected draft 1 ("not professional enterprise level")</h2>
+<h2>Round 2 (~16:00–16:30) — after the operator rejected draft 1 ("not professional enterprise level")</h2>
 <table>
 <tr><th style="width:22%">Incident</th><th style="width:26%">Root cause</th><th style="width:28%">Fix</th><th>Verified by</th></tr>
-<tr><td>The A4 memo asserted "romanized Hindi tokenizes like English" — unmeasured</td><td>The audit broke its own evidence rule in its own memo</td><td>Built <span class="mono">romanization.py</span>; measured: 2.25× on gpt2 (not ~1×) and <em>worse than native</em> on o200k for Hindi (1.87 vs 1.57)</td><td>4 live verify.py checks (both tokenizers, native + romanized)</td></tr>
-<tr><td>Published "35 checks" while the harness ran 40</td><td>Hand-typed count</td><td>Harness now counts and prints itself (<span class="mono">ALL n NUMBERS VERIFIED</span>); docs quote the printed value</td><td>Current output: ALL 50</td></tr>
+<tr><td>The A4 memo asserted "romanized Hindi tokenizes like English" — unmeasured</td><td>The audit broke its own evidence rule in its own memo</td><td>Built <span class="mono">romanization.py</span>; measured: 2.27× on gpt2 (not ~1×) and <em>worse than native</em> on o200k for Hindi (1.88 vs 1.57); round-3 pipeline fixes (candra, danda) refined these to the current 2.25 / 1.87</td><td>4 live verify.py checks (both tokenizers, native + romanized)</td></tr>
+<tr><td>Published "35 checks" while the harness ran 40</td><td>Hand-typed count</td><td>Harness now counts and prints itself (<span class="mono">ALL n NUMBERS VERIFIED</span>); docs quote the printed value. (The bulk find-replace that fixed the documents also overwrote the notebook's own historical "35" — caught by the round-4 release gate, restored in NOTEBOOK round 4)</td><td>Current output: ALL 50</td></tr>
 <tr><td>Figure label collisions (2)</td><td>Annotation placed without rendering</td><td>Rendered, looked, moved/removed labels</td><td>Re-rendered PNGs</td></tr>
 </table>
 
-<h2>Round 3 (16:45–18:51) — after rejection 2: the audit gets audited</h2>
+<h2>Round 3 (~16:45–18:53) — after rejection 2: the audit gets audited</h2>
 <p>Escalation: a deterministic multi-agent workflow — <strong>9 adversarial reviewer lenses → merge → two-lens
-verification per finding</strong> (59 agents, 784 tool calls). 50 raw findings → 31 merged → <strong>30 confirmed, 1
-refuted</strong>. The highlights, all fixed and re-verified the same evening:</p>
+verification per finding</strong> (59 agents, 784 tool calls — scale logged in NOTEBOOK round 4). 50 raw findings →
+31 merged → <strong>30 confirmed, 1 refuted</strong>. The highlights, all fixed and re-verified the same evening:</p>
 <table>
 <tr><th style="width:22%">Incident</th><th style="width:26%">Root cause</th><th style="width:28%">Fix</th><th>Verified by</th></tr>
 <tr><td><strong>The 128k-vocab trap — missed by me, caught by the panel.</strong> All "current stack costs 7.4×" pricing assumed v0's gpt2 is the serving tokenizer; the spec says vocab = 128k</td><td>Inherited v0's framing without reconciling it against v0's own spec sheet</td><td>Every coupling claim hedged and bracketed; table relabelled "v0's tokenizer"; measuring FLM-4B's real tokenizer promoted to a recommendation; the one tokenizer-independent claim (3584-token English content can't fit in Hindi) kept, with its justification (min premium 1.16 &gt; 1.14)</td><td>REPORT_v1 §4; memo/partC hedges</td></tr>
@@ -47,6 +47,16 @@ refuted</strong>. The highlights, all fixed and re-verified the same evening:</p
 <tr><td>Deliverability was silently broken: nothing committed to git (a "git link" submission would ship empty); <span class="mono">core.autocrlf</span> would rewrite the hash-pinned corpus on any Windows clone; four scripts hardcoded paths; the bootstrap hardcoded n=10 six times (a pasted line would leave the CI unchanged); AI_USAGE ended in a template placeholder</td><td>Working-tree development; environment assumptions never tested against the delivery path</td><td><span class="mono">_paths.py</span> resolver + <span class="mono">STARTER_KIT</span>; CLI overrides (<span class="mono">--corpus/--hin/--log</span>); derived sizes; root <span class="mono">.gitattributes * -text</span> + <span class="mono">.gitignore</span>; CI workflow; placeholder → honest defense-prep checklist; everything committed and pushed</td><td>Live smoke tests (pasted file moved the CI [5.37,6.43]→[5.32,6.37]); push f12c3ae..de0749e; CI on GitHub</td></tr>
 <tr><td>Two breakages <em>during the fixing</em>: hardcoded "ben +1.2%" into a generator minutes after fixing that exact class; a smoke test overwrote the canonical experiment output</td><td>Habit outliving its correction; side-effectful smoke test</td><td>Note derived from computed deltas; canonical output regenerated</td><td>Final full verify run: ALL 50</td></tr>
 </table>
+
+<h2>Round 4 (2026-09-04) — the documentation pass gets the same treatment</h2>
+<p>This document and its two siblings were hand-authored, so a three-agent release gate audited them the way
+round 3 audited the submission: a fresh-clone verification (passed all six steps — verify green from a clone, corpus
+hashes intact through checkout, overrides live, regenerated outputs byte-identical), a forensic docs-vs-ground-truth
+number audit, and a link/staleness sweep. The gate found 13 issues in the drafts — including a rounded "40×" where
+the machine output says ~38×, dates conflating the two working days, and the discovery that a round-3 bulk
+find-replace had silently rewritten the notebook's own historical record (the exact opposite of a lab notebook's
+job). All fixed; the corrections and the workflow-scale facts are recorded in NOTEBOOK round 4 so this page's every
+number is repo-traceable. GitHub Actions is green on every pushed commit.</p>
 
 <h2>The operator's role (the human, stated honestly)</h2>
 <p>This project was AI-executed under human direction — and saying so precisely is what makes it an interview
@@ -78,6 +88,6 @@ is both mandatory and, given the process above, the stronger story.</li>
 it caught its own author — twice by hand, thirty times by machine.</li>
 </ul>
 
-<p class="meta">Sources: submission/NOTEBOOK.md (chronology) · submission/AI_USAGE.md (AI failure incidents 1–7) ·
-red-team workflow journal (59 agents) · git history github.com/Manureddy148/AI_Task2.</p>
+<p class="meta">Sources: submission/NOTEBOOK.md rounds 1–4 (chronology, workflow scale, restored incidents) ·
+submission/AI_USAGE.md (AI failure incidents 1–7) · git history github.com/Manureddy148/AI_Task2 · compiled 2026-09-04.</p>
 </body></html>

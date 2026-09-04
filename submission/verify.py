@@ -6,8 +6,8 @@ Fast mode (default, ~30 s): recomputes the Part A toy experiments, corpus hashes
 romanization headline and ALL of Part B live; checks A3 headline values against
 results.csv (regenerate that with fertility_v1.py or --full).
 
-    python verify.py          # fast
-    python verify.py --full   # also regenerates results.csv first (~2 min)
+    python verify.py          # fast (~30 s)
+    python verify.py --full   # regenerates results/romanization/reconcile first (~3 min)
 
 Exit code 0 = every published number reproduces. Run this at the start of the
 defense.

@@ -86,7 +86,7 @@ itl_predicted = (8.4e9 + resident_seqs × avg_ctx × 114,688 B) / (eff × 300 GB
 A single fitted efficiency **eff ≈ 0.65** reproduces the measured ITL of **all 13
 rows within ±2.8%** — short sweep and long sweep, before and after the preemption
 knee. The compute side is negligible: 2·4.2 GFLOPs/token × 24 seqs ≈ 1.7 ms/step
-against ~63 ms of memory traffic — **decode is memory-bound ~40× over**. This
+against ~63 ms of memory traffic — **decode is memory-bound ~38× over**. This
 explains, quantitatively, why ITL grows with batch and with context (more KV
 bytes per step), why batching helps goodput anyway (the 8.4 GB weight read is
 amortized over more sequences), and why "GPU utilization" intuitions from

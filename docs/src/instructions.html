@@ -5,7 +5,7 @@
 
 <h1>Instructions &amp; Defense Runbook</h1>
 <p class="sub">How to set up, verify, regenerate, and defend every number in the submission &nbsp;·&nbsp;
-repo: <span class="mono">github.com/Manureddy148/AI_Task2</span> &nbsp;·&nbsp; 2026-08-31</p>
+repo: <span class="mono">github.com/Manureddy148/AI_Task2</span> &nbsp;·&nbsp; compiled 2026-09-04</p>
 
 <h2>1 &nbsp;Setup</h2>
 <pre>git clone https://github.com/Manureddy148/AI_Task2.git &amp;&amp; cd AI_Task2
@@ -21,6 +21,9 @@ python submission/verify.py --full     # also regenerates results/romanization/r
 <p>The 50 assertions cover: byte-exact REPORT_v0 reproduction, each bug's isolated delta, corpus SHA-256 pins,
 the full parity grid, every derived ratio quoted in prose, romanization on both tokenizer generations, all 13
 bench-log reconciliations, and the roofline fit. CI runs the same harness on every push.</p>
+<p><strong>Defense preparation:</strong> <span class="mono">python submission/defense_drill.py</span> walks the
+candidate's personal checklist interactively (~10 min) — runs verify, the A0 repro, a live corpus toggle, B1 on
+paper, and one bench row by hand, showing expected vs actual at each step.</p>
 
 <h2>3 &nbsp;Regenerate everything from scratch</h2>
 <pre>python submission/partA/corpus/build_corpus.py     # corpus (downloads on first run; hash-pinned)
@@ -48,7 +51,7 @@ python submission/verify.py                        # assert it all again</pre>
 <tr><td>114,688 B/token KV (112 KiB)</td><td>2 (K,V) × 28 layers × 8 KV heads × 128 head_dim × 2 B fp16</td><td>partB/kv_math.py</td></tr>
 <tr><td>25.7 → ~25 concurrent 4k seqs</td><td>(0.92·24 − 8.4 − 1.6) GB ÷ (4096 × 114,688 B)</td><td>kv_math.py; log confirms: util 0.93@24, preempt 7=32−25, 23=48−25</td></tr>
 <tr><td>201 tok/s honest goodput</td><td>512·24/61.16 by definition; independent route n/itl = 249.8 tok/s over the 49.1 s decode phase; counter/8 is an identity, not evidence</td><td>reconcile.py §3; capacity.md B3</td></tr>
-<tr><td>65% MBU roofline</td><td>itl = (8.4 GB + resident·avg_ctx·112 KiB)/(0.65·300 GB/s) fits 13/13 ITLs ±2.8%; compute 1.7 ms vs 63 ms memory → memory-bound 40×</td><td>reconcile.py §6</td></tr>
+<tr><td>65% MBU roofline</td><td>itl = (8.4 GB + resident·avg_ctx·112 KiB)/(0.65·300 GB/s) fits 13/13 ITLs ±2.8%; compute 1.7 ms vs 63.2 ms memory → memory-bound ~38×</td><td>reconcile.py §6</td></tr>
 <tr><td>Parity: hin 7.42× · kan 13.59× · tam 15.54× · tel 12.97× · ben 9.61× · mar 7.86×</td><td>total tokens ÷ English tokens over the same 1012 parallel sentences (gpt2 = v0's tokenizer); CIs ≤ ±1.28%</td><td>partA/results/results.csv; fig1</td></tr>
 <tr><td>MuRIL 1.00–1.20×</td><td>Same corpus, Indic-focused vocab; unk ≤ 0.38% (integrity column)</td><td>results.csv</td></tr>
 <tr><td>Romanized hin 2.25× (gpt2) / 1.87× (o200k)</td><td>IAST-derived chat approximation; organic-convention probe 2.11/1.76; Tamil is a range 2.37–3.09× (aspirate artifact bound)</td><td>partA/audit/romanization_output.md</td></tr>
@@ -61,8 +64,9 @@ python submission/verify.py                        # assert it all again</pre>
 language; across languages it errs −15% (hin) to +36% (kan) against content-constant truth because words carry
 different content per language — findings.md C1 table, derived from results.csv.</li>
 <li><strong>"Your two metrics agreed — doesn't that confirm the result?"</strong> Shared numerator ⇒ correlation by
-construction; the repo shows the same tokens giving 6.34× / 11.39× / 2.90× / 7.46× under four denominators —
-findings.md C2. (And the audit applied this to itself: see B3's relabelled "identity".)</li>
+construction; the repo shows the same tokens giving 6.34× (word) / 11.39× (grapheme) / 2.90× (byte) / 7.46× (code
+point) — findings.md C2 plus results.md's denominator section. (And the audit applied this to itself: see B3's
+relabelled "identity".)</li>
 <li><strong>"Is 7.4× what production pays?"</strong> Unknown — the spec's 128k vocab is not gpt2; the premium is
 bracketed (cl100k row is scale-illustration) until recommendation 6 measures the real tokenizer. REPORT_v1 §4.</li>
 <li><strong>"Why does throughput fall at batch 32?"</strong> 448 MiB/seq × 32 &gt; 12.08 GB budget → 7 evictions with

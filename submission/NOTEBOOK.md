@@ -241,3 +241,48 @@ are the record this round corrects. What the panel caught, and what changed:
 Final state: `python verify.py` → **ALL 50 NUMBERS VERIFIED**; figures
 regenerated with data-derived annotations; all six product languages measured;
 every prose figure traceable to a script.
+
+---
+
+## Round 4 (2026-09-04, ~16:45-17:50) — documentation pass, release gate, and the record set straight
+
+Rounds 1-3 all ran on 2026-08-31 (commit `de0749e` that evening); today's pass
+added the PDF documentation pack (`docs/`, commit `cd3e298`), a guided
+`defense_drill.py`, and a three-agent release gate (fresh-clone verification /
+docs-vs-ground-truth audit / link & staleness sweep). Facts recorded here so
+every number in the PDFs traces to a repo artifact:
+
+* **Red-team workflow scale (round 3)**: 59 agents (9 reviewers + 1 merge + 49
+  verifiers), 784 tool calls, ~3.29M subagent tokens; release gate: 3 agents,
+  65 tool calls. Verdict flow: 50 raw → 31 merged → 30 confirmed, 1 refuted.
+* **The "35 checks" incident, restored.** In round 2 the draft documents
+  published "35 checks" while the harness, once made to count itself, printed
+  40. The bulk find-replace that corrected the documents also silently rewrote
+  this notebook's own historical mention of 35 — corrupting the record it was
+  supposed to keep. Caught by today's release gate ("the prior figure exists
+  nowhere in the repo"); restored here. Lesson: never bulk-edit the log.
+* **Two breakages during round-3 fixing, previously chat-only**: (1) minutes
+  after fixing the hand-typed-numbers class, a "ben +1.2%, hin +0.1%" string
+  was hardcoded into fertility_v1's *generator* — caught immediately, replaced
+  with computed deltas; (2) a live-override smoke test (`experiments.py --hin`
+  with an appended line: ratio 5.8871 → 6.2142 [note: that value was round 1's
+  probe; today's smoke line gave 5.9268], bootstrap CI [5.37,6.43] →
+  [5.32,6.37]) overwrote the canonical experiment_output.md — regenerated with
+  defaults, then verified.
+* **Scheme artifacts recorded precisely**: before the round-3 fix, sanscript
+  rendered danda as "|" at line ends (hin/ben) and left candra vowels as raw
+  Devanagari on 190/1012 hin and 333/1012 mar lines; both fixed, residuals now
+  measured at 0 and asserted.
+* **Roofline wording precision**: reconcile.py's computed ratio is 63.2/1.7 ≈
+  **38×** memory-over-compute; earlier prose rounded it to "40×" — corrected to
+  ~38× in capacity.md, REPORT_v1 and the PDFs (the generated output was always
+  right).
+* **Release gate results**: fresh `git clone` → `verify.py` **ALL 50 NUMBERS
+  VERIFIED** with all 7 corpus hashes intact (validates `.gitattributes`);
+  regenerated outputs byte-identical to committed ones; GitHub Actions green on
+  both pushed commits (`de0749e`, `cd3e298`). Operator rejection wording, for
+  the record ("not impressed. professional enterprise level is what i want";
+  "still not okay and its no use also, this is not as per standards") — those
+  two rejections triggered rounds 2 and 3.
+* Housekeeping: `starter_kit (1).zip` renamed to `starter_kit_original.zip`
+  (provenance of the audited inputs); drill script and this entry committed.

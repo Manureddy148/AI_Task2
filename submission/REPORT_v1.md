@@ -75,7 +75,7 @@ quantity, not a constant (`partA/audit/romanization.py`).
 | generation goodput, prompt 3584 | **201 tok/s** peak at batch 24 | by definition (gen·n/wall); corroborated independently by the latency columns (steady decode n/itl ≈ 250 tok/s over the decode phase) and the roofline below |
 | generation goodput, prompt 512 | 755 tok/s at batch 64 | 16,384 gen tokens / 21.68 s |
 | batch 48 today | 162 tok/s (**not** 3200) | preemption thrash past the ceiling |
-| decode regime | memory-bound 40× over | one 65% MBU bandwidth model fits all 13 ITLs within ±2.8% |
+| decode regime | memory-bound ~38× over | one 65% MBU bandwidth model fits all 13 ITLs within ±2.8% |
 
 **Operating envelope (replaces v0 §2's recommendation):** cap long-context
 admission at **24 concurrent sequences** per L4 (predicted for offered load 48:
