@@ -15,7 +15,7 @@ sentence on why the delta proves the claim.
 | [ARCHITECTURE.md](ARCHITECTURE.md) | how the audit is structured: method, experiment design, repo map |
 | [submission/REPORT_v1.md](submission/REPORT_v1.md) | **the product**: the corrected report leadership should use instead of v0 |
 | [submission/](submission/) | **the deliverable** — verification harness, notebook, evidence, corrected analysis, memos |
-| [docs/](docs/) | PDF pack: [ARCHITECTURE.pdf](docs/ARCHITECTURE.pdf) (system design), [INSTRUCTIONS.pdf](docs/INSTRUCTIONS.pdf) (setup + defense runbook), [INCIDENTS.pdf](docs/INCIDENTS.pdf) (what broke & how it was fixed — honest log) |
+| [docs/](docs/) | PDF pack: [ARCHITECTURE.pdf](docs/ARCHITECTURE.pdf) (system deep-dive + diagrams), [INSTRUCTIONS.pdf](docs/INSTRUCTIONS.pdf) (setup + defense runbook), [INCIDENTS.pdf](docs/INCIDENTS.pdf) (what broke & how it was fixed), [PRESENTATION.pdf](docs/PRESENTATION.pdf) (30-minute presentation playbook) |
 
 ## The deliverable at a glance
 

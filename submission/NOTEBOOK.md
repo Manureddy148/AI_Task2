@@ -277,8 +277,11 @@ every number in the PDFs traces to a repo artifact:
   **38×** memory-over-compute; earlier prose rounded it to "40×" — corrected to
   ~38× in capacity.md, REPORT_v1 and the PDFs (the generated output was always
   right).
-* **Release gate results**: fresh `git clone` → `verify.py` **ALL 50 NUMBERS
-  VERIFIED** with all 7 corpus hashes intact (validates `.gitattributes`);
+* **Release gate results**: the six-step fresh-clone protocol passed 6/6 —
+  (1) clone, (2) `verify.py` → **ALL 50 NUMBERS VERIFIED**, (3) all 7 corpus
+  hashes intact (validates `.gitattributes`), (4) live `--hin` override moves
+  the numbers then restores, (5) `STARTER_KIT` env resolution, (6) `reconcile.py`
+  clean run;
   regenerated outputs byte-identical to committed ones; GitHub Actions green on
   both pushed commits (`de0749e`, `cd3e298`). Operator rejection wording, for
   the record ("not impressed. professional enterprise level is what i want";

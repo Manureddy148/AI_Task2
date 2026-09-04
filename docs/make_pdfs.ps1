@@ -9,7 +9,8 @@ if (-not (Test-Path $browser)) { throw "No Edge/Chrome found for headless PDF pr
 $docs = @(
     @{ src = "architecture.html"; out = "ARCHITECTURE.pdf" },
     @{ src = "instructions.html"; out = "INSTRUCTIONS.pdf" },
-    @{ src = "incidents.html";    out = "INCIDENTS.pdf" }
+    @{ src = "incidents.html";    out = "INCIDENTS.pdf" },
+    @{ src = "presentation.html"; out = "PRESENTATION.pdf" }
 )
 foreach ($d in $docs) {
     $src = Join-Path $here "src\$($d.src)"
