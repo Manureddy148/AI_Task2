@@ -1,0 +1,73 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 400" font-family="Segoe UI, system-ui, sans-serif">
+  <defs>
+    <marker id="qarr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#6b6a66"/>
+    </marker>
+  </defs>
+  <style>
+    .box  { fill: #ffffff; stroke-width: 1.8; rx: 8; }
+    .gate { fill: #fdeeee; stroke: #d03b3b; stroke-width: 1.6; rx: 8; }
+    .t    { font-size: 17px; font-weight: 600; fill: #1a1a1a; }
+    .s    { font-size: 13.5px; fill: #3d3c39; }
+    .lbl  { font-size: 14px; font-weight: 700; letter-spacing: 1px; fill: #52514e; }
+    .flow { stroke: #6b6a66; stroke-width: 1.8; fill: none; marker-end: url(#qarr); }
+  </style>
+
+  <text x="22" y="38" class="lbl">THE QUALITY LOOP — HOW THE AUDIT GOT AUDITED</text>
+
+  <rect x="20" y="70" width="196" height="150" class="box" stroke="#2a78d6"/>
+  <text x="32" y="95" class="t">Round 1 · Aug 31</text>
+  <text x="32" y="118" class="s">Build the audit:</text>
+  <text x="32" y="136" class="s">pin baseline, isolate bugs,</text>
+  <text x="32" y="154" class="s">corpus, Part B reconciliation.</text>
+  <text x="32" y="176" class="s">2 self-caught errors logged</text>
+  <text x="32" y="194" class="s">(rounded ratios, timestamps)</text>
+
+  <rect x="238" y="100" width="120" height="88" class="gate"/>
+  <text x="252" y="128" class="t" fill="#a32a2a">operator</text>
+  <text x="252" y="150" class="t" fill="#a32a2a">rejects ✗</text>
+  <text x="252" y="172" class="s">"enterprise level"</text>
+
+  <rect x="380" y="70" width="196" height="150" class="box" stroke="#2a78d6"/>
+  <text x="392" y="95" class="t">Round 2 · Aug 31</text>
+  <text x="392" y="118" class="s">Audit's own claims measured:</text>
+  <text x="392" y="136" class="s">romanization built, MuRIL +</text>
+  <text x="392" y="154" class="s">unk checks, roofline, verify.py</text>
+  <text x="392" y="176" class="s">harness, REPORT_v1, figures,</text>
+  <text x="392" y="194" class="s">all 6 product languages</text>
+
+  <rect x="598" y="100" width="120" height="88" class="gate"/>
+  <text x="612" y="128" class="t" fill="#a32a2a">operator</text>
+  <text x="612" y="150" class="t" fill="#a32a2a">rejects ✗</text>
+  <text x="612" y="172" class="s">"not per standards"</text>
+
+  <rect x="740" y="52" width="212" height="186" class="box" stroke="#4a3aa7"/>
+  <text x="752" y="77" class="t">Round 3 · red team</text>
+  <text x="752" y="100" class="s">9 adversarial lenses (parallel)</text>
+  <text x="752" y="118" class="s">→ merge: 50 raw → 31 unique</text>
+  <text x="752" y="136" class="s">→ 2-lens verify: 30 confirmed</text>
+  <text x="752" y="158" class="s">all 30 fixed; checks 40 → 50;</text>
+  <text x="752" y="176" class="s">128k trap, circular evidence,</text>
+  <text x="752" y="194" class="s">Tamil artifact, git delivery</text>
+  <text x="752" y="216" class="s" font-style="italic">59 agents · 784 tool calls</text>
+
+  <rect x="974" y="52" width="206" height="186" class="box" stroke="#0a7f3f"/>
+  <text x="986" y="77" class="t">Round 4 · Sep 4</text>
+  <text x="986" y="100" class="s">Docs pack + release gate:</text>
+  <text x="986" y="118" class="s">fresh-clone verify (6/6),</text>
+  <text x="986" y="136" class="s">docs-vs-truth number audit,</text>
+  <text x="986" y="154" class="s">link/staleness sweep;</text>
+  <text x="986" y="176" class="s">13 doc findings fixed, drill</text>
+  <text x="986" y="194" class="s">executed, transcript committed</text>
+  <text x="986" y="216" class="s" font-style="italic">CI green · pushed</text>
+
+  <path class="flow" d="M216 145 L238 145"/>
+  <path class="flow" d="M358 145 L380 145"/>
+  <path class="flow" d="M576 145 L598 145"/>
+  <path class="flow" d="M718 145 L740 145"/>
+  <path class="flow" d="M952 145 L974 145"/>
+
+  <rect x="20" y="290" width="1160" height="72" fill="#f4f3ef" rx="10"/>
+  <text x="600" y="322" text-anchor="middle" class="t">Every round exits through the same gate:</text>
+  <text x="600" y="346" text-anchor="middle" class="s" font-family="Consolas, monospace" font-size="15px">python submission/verify.py  →  ALL 50 NUMBERS VERIFIED   (locally, from a fresh clone, and in CI)</text>
+</svg>

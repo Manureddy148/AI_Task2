@@ -2,7 +2,10 @@
 
 How this audit is organized, and why. The design goal is a submission where **every
 claim is one command away from being re-derived live** — because the defense session
-will demand exactly that.
+will demand exactly that. (Full deep-dive with component-by-component explanations:
+[docs/ARCHITECTURE.pdf](docs/ARCHITECTURE.pdf).)
+
+![System data-flow](docs/diagrams/system.svg)
 
 ## 1. What is being audited
 
@@ -112,6 +115,8 @@ a day-1 experiment designed as a *gate between paths*, not a formality → numer
 success threshold and a kill criterion with a date. One page, in `partC/memo.md`.
 
 ## 6. Chronology and honesty artifacts
+
+![Quality loop](docs/diagrams/quality_loop.svg)
 
 - `submission/NOTEBOOK.md` — written **as the work happens**, not reconstructed:
   hypothesis → experiment → result → revision, dead ends kept.

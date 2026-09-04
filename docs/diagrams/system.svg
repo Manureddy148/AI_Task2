@@ -1,0 +1,171 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 740" font-family="Segoe UI, system-ui, sans-serif">
+  <defs>
+    <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#6b6a66"/>
+    </marker>
+    <marker id="arrg" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#0a7f3f"/>
+    </marker>
+  </defs>
+  <style>
+    .band  { rx: 10; }
+    .box   { fill: #ffffff; stroke-width: 1.6; rx: 8; }
+    .t     { font-size: 17px; font-weight: 600; fill: #1a1a1a; }
+    .s     { font-size: 13.5px; fill: #3d3c39; }
+    .lbl   { font-size: 14px; font-weight: 700; letter-spacing: 1px; fill: #52514e; }
+    .flow  { stroke: #6b6a66; stroke-width: 1.8; fill: none; marker-end: url(#arr); }
+    .vflow { stroke: #0a7f3f; stroke-width: 1.8; stroke-dasharray: 6 5; fill: none; marker-end: url(#arrg); }
+  </style>
+
+  <!-- ============ INPUT COLUMN ============ -->
+  <text x="22" y="42" class="lbl">AUDITED INPUTS</text>
+  <rect x="20" y="60" width="192" height="58" class="box" stroke="#6b6a66"/>
+  <text x="32" y="84" class="t">REPORT_v0.md</text>
+  <text x="32" y="104" class="s">claims under audit</text>
+
+  <rect x="20" y="132" width="192" height="58" class="box" stroke="#6b6a66"/>
+  <text x="32" y="156" class="t">fertility.py + toys</text>
+  <text x="32" y="176" class="s">the intern's script &amp; corpora</text>
+
+  <rect x="20" y="204" width="192" height="58" class="box" stroke="#6b6a66"/>
+  <text x="32" y="228" class="t">model_spec.md</text>
+  <text x="32" y="248" class="s">FLM-4B + L4 serving spec</text>
+
+  <rect x="20" y="276" width="192" height="58" class="box" stroke="#6b6a66"/>
+  <text x="32" y="300" class="t">bench_log.csv</text>
+  <text x="32" y="320" class="s">13 load-test rows</text>
+
+  <rect x="20" y="352" width="192" height="58" class="box" stroke="#8a8880" stroke-dasharray="5 4"/>
+  <text x="32" y="376" class="t">FLORES-200</text>
+  <text x="32" y="396" class="s">external · public · CC-BY-SA</text>
+
+  <!-- ============ PART A BAND ============ -->
+  <rect x="248" y="55" width="592" height="272" fill="#eef4fc" class="band"/>
+  <text x="262" y="80" class="lbl" fill="#1c5cab">PART A — TOKENIZER AUDIT</text>
+
+  <rect x="262" y="94" width="172" height="100" class="box" stroke="#2a78d6"/>
+  <text x="274" y="117" class="t">A0 + A2</text>
+  <text x="274" y="137" class="s">experiments.py</text>
+  <text x="274" y="155" class="s">byte-exact repro, then</text>
+  <text x="274" y="173" class="s">one-toggle bug isolation</text>
+
+  <rect x="262" y="212" width="172" height="100" class="box" stroke="#2a78d6"/>
+  <text x="274" y="235" class="t">A1 corpus</text>
+  <text x="274" y="255" class="s">build_corpus.py</text>
+  <text x="274" y="273" class="s">7 langs × 1012 parallel</text>
+  <text x="274" y="291" class="s">SHA-256 pinned</text>
+
+  <rect x="468" y="94" width="176" height="100" class="box" stroke="#2a78d6"/>
+  <text x="480" y="117" class="t">A3 grid</text>
+  <text x="480" y="137" class="s">fertility_v1.py</text>
+  <text x="480" y="155" class="s">5 tokenizers × 4 denoms</text>
+  <text x="480" y="173" class="s">paired-bootstrap CIs, unk%</text>
+
+  <rect x="468" y="212" width="176" height="100" class="box" stroke="#2a78d6"/>
+  <text x="480" y="235" class="t">Romanization</text>
+  <text x="480" y="255" class="s">romanization.py</text>
+  <text x="480" y="273" class="s">chat-script parity, probes,</text>
+  <text x="480" y="291" class="s">Tamil artifact bound</text>
+
+  <rect x="678" y="94" width="148" height="218" class="box" stroke="#2a78d6"/>
+  <text x="690" y="117" class="t">Evidence</text>
+  <text x="690" y="140" class="s">findings.md</text>
+  <text x="690" y="158" class="s">results.csv / .md</text>
+  <text x="690" y="176" class="s">experiment_output</text>
+  <text x="690" y="194" class="s">romanization_output</text>
+  <text x="690" y="212" class="s">corpus_card</text>
+  <text x="690" y="236" class="s" font-style="italic">every table script-</text>
+  <text x="690" y="254" class="s" font-style="italic">emitted, none typed</text>
+
+  <!-- ============ PART B BAND ============ -->
+  <rect x="248" y="342" width="592" height="158" fill="#fdf0e9" class="band"/>
+  <text x="262" y="367" class="lbl" fill="#a33e12">PART B — CAPACITY RECONCILIATION</text>
+
+  <rect x="262" y="380" width="172" height="104" class="box" stroke="#d95926"/>
+  <text x="274" y="403" class="t">B1 arithmetic</text>
+  <text x="274" y="423" class="s">kv_math.py (spec only)</text>
+  <text x="274" y="441" class="s">112 KiB/token</text>
+  <text x="274" y="459" class="s">→ 25.7 concurrent seqs</text>
+
+  <rect x="468" y="380" width="176" height="104" class="box" stroke="#d95926"/>
+  <text x="480" y="403" class="t">Replay + roofline</text>
+  <text x="480" y="423" class="s">reconcile.py §1–§7</text>
+  <text x="480" y="441" class="s">13/13 rows predicted;</text>
+  <text x="480" y="459" class="s">65% MBU fits all ITLs</text>
+
+  <rect x="678" y="380" width="148" height="104" class="box" stroke="#d95926"/>
+  <text x="690" y="403" class="t">Evidence</text>
+  <text x="690" y="426" class="s">capacity.md</text>
+  <text x="690" y="444" class="s">reconcile_output</text>
+
+  <!-- ============ PRODUCTS COLUMN ============ -->
+  <text x="880" y="42" class="lbl">THE PRODUCT</text>
+  <rect x="878" y="60" width="302" height="168" class="box" stroke="#1a1a1a" stroke-width="2.2"/>
+  <text x="892" y="87" class="t" font-size="19px">REPORT_v1.md</text>
+  <text x="892" y="110" class="s">corrected parities (7.4–15.5× → 1.0–1.2×)</text>
+  <text x="892" y="128" class="s">operating envelope (cap 24, ~200 tok/s)</text>
+  <text x="892" y="146" class="s">A×B coupling + 128k-vocab caveat</text>
+  <text x="892" y="164" class="s">recommendations, anchored monitor</text>
+  <text x="892" y="182" class="s">limits stated as falsifiable forecasts</text>
+  <text x="892" y="207" class="s" font-style="italic">figures from make_figures.py</text>
+
+  <rect x="878" y="248" width="302" height="62" class="box" stroke="#6b6a66"/>
+  <text x="892" y="272" class="t">A4 memo · Part C memo</text>
+  <text x="892" y="292" class="s">decision memos, tie-proof gates</text>
+
+  <rect x="878" y="330" width="302" height="62" class="box" stroke="#6b6a66"/>
+  <text x="892" y="354" class="t">NOTEBOOK · AI_USAGE</text>
+  <text x="892" y="374" class="s">honest chronology + AI incident log</text>
+
+  <!-- ============ VERIFICATION SPINE ============ -->
+  <rect x="20" y="530" width="1160" height="186" fill="#e9f5ee" class="band"/>
+  <text x="34" y="556" class="lbl" fill="#0a7f3f">VERIFICATION SPINE — NUMBERS UNDER TEST</text>
+
+  <rect x="36" y="572" width="300" height="126" class="box" stroke="#0a7f3f"/>
+  <text x="48" y="596" class="t">verify.py — 50 assertions</text>
+  <text x="48" y="618" class="s">A0/A2 toys 9 · corpus pins 7</text>
+  <text x="48" y="636" class="s">A3 grid + prose ratios 17</text>
+  <text x="48" y="654" class="s">romanization 5 · Part B 12</text>
+  <text x="48" y="676" class="s" font-style="italic">exit code gates everything</text>
+
+  <rect x="364" y="572" width="240" height="126" class="box" stroke="#0a7f3f"/>
+  <text x="376" y="596" class="t">CI — verify.yml</text>
+  <text x="376" y="618" class="s">same harness on every push</text>
+  <text x="376" y="636" class="s">green on all pushed commits</text>
+  <text x="376" y="658" class="s">(fresh Ubuntu checkout)</text>
+
+  <rect x="632" y="572" width="252" height="126" class="box" stroke="#0a7f3f"/>
+  <text x="644" y="596" class="t">defense_drill.py</text>
+  <text x="644" y="618" class="s">guided re-derivation of the</text>
+  <text x="644" y="636" class="s">key numbers, expected vs</text>
+  <text x="644" y="654" class="s">actual; transcript committed</text>
+
+  <rect x="912" y="572" width="252" height="126" class="box" stroke="#0a7f3f"/>
+  <text x="924" y="596" class="t">Reproducibility rails</text>
+  <text x="924" y="618" class="s">_paths.py resolver · fixed seeds</text>
+  <text x="924" y="636" class="s">.gitattributes * -text</text>
+  <text x="924" y="654" class="s">CLI overrides for live defense</text>
+
+  <!-- ============ FLOW ARROWS ============ -->
+  <path class="flow" d="M212 89  L262 118"/>
+  <path class="flow" d="M212 161 L262 144"/>
+  <path class="flow" d="M212 381 L235 381 L235 262 L262 262"/>
+  <path class="flow" d="M212 233 L235 233 L235 418 L262 418"/>
+  <path class="flow" d="M212 305 L245 305 L245 445 L262 445"/>
+  <path class="flow" d="M434 112 L451 112 L451 88 L661 88 L661 120 L678 120"/>
+  <path class="flow" d="M434 262 L468 262"/>
+  <path class="flow" d="M434 236 L451 236 L451 160 L468 160"/>
+  <path class="flow" d="M644 144 L678 144"/>
+  <path class="flow" d="M644 262 L661 262 L661 200 L678 200"/>
+  <path class="flow" d="M434 432 L468 432"/>
+  <path class="flow" d="M644 432 L678 432"/>
+  <path class="flow" d="M826 144 L878 144"/>
+  <path class="flow" d="M826 432 L852 432 L852 180 L878 180"/>
+  <path class="flow" d="M826 200 L852 200 L852 279 L878 279"/>
+
+  <!-- verification up-arrows -->
+  <path class="vflow" d="M500 530 L500 504"/>
+  <path class="vflow" d="M752 530 L752 488"/>
+  <path class="vflow" d="M1029 530 L1029 396"/>
+  <text x="36" y="522" class="s" fill="#0a7f3f" font-style="italic">re-derives &amp; asserts every published number ▲</text>
+</svg>
