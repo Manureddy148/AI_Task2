@@ -1,0 +1,134 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>The Audit — System Architecture</title>
+<link rel="stylesheet" href="style.css"></head>
+<body>
+
+<h1>The Audit — System Architecture</h1>
+<p class="sub">Audit of an intern's tokenizer-fertility &amp; serving-capacity report (REPORT_v0) before leadership
+routing/capacity decisions &nbsp;·&nbsp; repo: <span class="mono">github.com/Manureddy148/AI_Task2</span> &nbsp;·&nbsp; 2026-08-31</p>
+
+<h2>1 &nbsp;What is audited, and what the audit ships</h2>
+<p>REPORT_v0 makes two families of claims: <strong>§1</strong> "Hindi costs ~6× English per token-word; the two metrics
+confirm each other; it's a property of the script — route Indic traffic and budget 6×", and <strong>§2</strong> "longer
+prompts give better throughput; plan ~1600 tok/s per L4, linear to ~3200 at batch 48". Every claim rests on four
+shipped artifacts (<span class="mono">fertility.py</span>, <span class="mono">corpus_sample/</span>,
+<span class="mono">bench/model_spec.md</span>, <span class="mono">bench/bench_log.csv</span>), so every claim is
+checkable — and gets checked. The audit's product is <strong>REPORT_v1</strong> (the corrected report leadership can
+actually use) sitting on a fully machine-verified evidence chain.</p>
+
+<h2>2 &nbsp;Evidence discipline — the five design rules</h2>
+<table>
+<tr><th style="width:24%">Rule</th><th>Mechanism</th></tr>
+<tr><td><strong>Pin the baseline first</strong></td><td>REPORT_v0's numbers reproduced byte-exact from the shipped script + corpora before any claim; all deltas are then attributable.</td></tr>
+<tr><td><strong>One variable at a time</strong></td><td>Each suspected bug is a single toggle against the as-shipped baseline (<span class="mono">experiments.py</span>); no flaw claimed without a measured Δ or a demonstrated conceptual failure on data.</td></tr>
+<tr><td><strong>Cleared items are deliverables</strong></td><td>Suspicious-but-fine items (<span class="mono">random.seed</span>, NFC) are cleared by experiment — hash-identical output, 0.00% deltas — not flagged.</td></tr>
+<tr><td><strong>Scripts over prose</strong></td><td>Every table is emitted by a version-controlled script; live-defense "change this input" is served by CLI flags (<span class="mono">--corpus LANG=PATH</span>, <span class="mono">--hin</span>, <span class="mono">--log</span>, <span class="mono">STARTER_KIT</span> env).</td></tr>
+<tr><td><strong>Numbers under test</strong></td><td><span class="mono">verify.py</span> re-derives and asserts every published figure — <strong>50 checks</strong> — run locally and in CI on every push. A prose number with no assertion is treated as unpublished.</td></tr>
+</table>
+
+<h2>3 &nbsp;Part A — tokenizer audit pipeline</h2>
+<div class="flow">
+  <div class="box"><span class="tag t-blue">A0/A2</span><strong>Repro + bug isolation</strong><br>
+  Byte-exact v0 repro; one-toggle experiments: <span class="mono">split(" ")</span> +0.59%,
+  <span class="mono">lower()</span> +2.92%, macro-agg +0.35% on the 5.89× headline; NFC &amp; seed cleared.</div>
+  <div class="arrow">→</div>
+  <div class="box"><span class="tag t-blue">A1</span><strong>Parallel corpus</strong><br>
+  FLORES-200 devtest, 1012 sentences × 7 languages (eng + all six product languages), hash-pinned,
+  content-constant by construction.</div>
+  <div class="arrow">→</div>
+  <div class="box"><span class="tag t-blue">A3</span><strong>Corrected analysis</strong><br>
+  5 tokenizers × 4 denominators, paired-bootstrap CIs, unk-rate integrity column; romanization measured
+  separately (incl. a quantified Tamil transliteration artifact).</div>
+  <div class="arrow">→</div>
+  <div class="box"><span class="tag t-blue">A4</span><strong>Decision memo</strong><br>
+  Parity vs English is the routing number; per-target budgeting; anchored production monitor.</div>
+</div>
+<p><strong>Core correction.</strong> A cross-language cost metric needs a denominator that holds <em>content</em>
+constant. Words, graphemes, code points and bytes all fail in different directions (per-word errs −15% for Hindi and
++36% for Kannada on the same data); only tokens-per-parallel-sentence is the quantity cost scales with. The
+"property of the script" root-cause is falsified by a 6.4× premium spread with script and content held constant:</p>
+<img class="fig" src="../../submission/figures/fig1_parity.png" alt="parity by tokenizer and language">
+
+<h2 class="pagebreak">4 &nbsp;Part B — capacity reconciliation as executable arithmetic</h2>
+<div class="flow">
+  <div class="box"><span class="tag t-orange">B1</span><strong>Spec-only prediction</strong><br>
+  KV = 2·28·8·128·2 = <strong>114,688 B/token</strong>; budget 12.08 GB → <strong>25.7</strong> concurrent 4k
+  sequences (<span class="mono">kv_math.py</span>).</div>
+  <div class="arrow">→</div>
+  <div class="box"><span class="tag t-orange">Replay</span><strong>13/13 rows reconciled</strong><br>
+  Predicted utilization matches every row to rounding; preemptions predicted <em>exactly</em>
+  (7 = 32−25, 23 = 48−25) (<span class="mono">reconcile.py</span>).</div>
+  <div class="arrow">→</div>
+  <div class="box"><span class="tag t-orange">B3</span><strong>Counter decomposition</strong><br>
+  <span class="mono">reported_tok_s</span> ≡ (prompt+gen)·n/wall on all rows (≤0.022%) — it counts prefill;
+  honest goodput 201 tok/s, corroborated independently via n/itl and the roofline.</div>
+  <div class="arrow">→</div>
+  <div class="box"><span class="tag t-orange">Roofline</span><strong>Mechanism closed</strong><br>
+  One 65% MBU parameter fits all 13 ITLs within ±2.8%; decode memory-bound 40× → prices both fixes
+  (max_num_seqs=24; fp8-KV 2× capacity).</div>
+</div>
+<p>The reconciliation doubles as instrument calibration: it also settles that the stack's "24 GB" is decimal
+(a GiB reading predicts util 0.82 / 3 preemptions at the knee — rejected by the logged 0.93 / 7), and surfaces a
+spec inconsistency v0 never noticed (vocab = 128k, which is not gpt2 — REPORT_v1 §4 brackets the production premium
+and makes measuring the real tokenizer a recommendation).</p>
+
+<h2>5 &nbsp;Verification architecture</h2>
+<div class="cols">
+<div>
+<ul>
+<li><strong><span class="mono">verify.py</span> — 50 assertions</strong>: baseline repro, per-bug deltas, corpus
+SHA-256 pins, the parity grid, prose-quoted derived ratios, romanization on two tokenizer generations, all 13
+bench-row reconciliations, roofline fit. Exit code gates CI.</li>
+<li><strong>CI</strong> (<span class="mono">.github/workflows/verify.yml</span>): runs the harness on every push.</li>
+<li><strong>Reproducibility</strong>: fixed seeds, hash-pinned corpus, <span class="mono">.gitattributes * -text</span>
+(a CRLF checkout would silently shift token counts), shared <span class="mono">_paths.py</span> input resolver.</li>
+</ul>
+</div>
+<div>
+<ul>
+<li><strong>Honesty artifacts</strong>: <span class="mono">NOTEBOOK.md</span> — chronological log with dead ends and
+self-caught errors kept; <span class="mono">AI_USAGE.md</span> — where AI helped, its seven concrete failure
+incidents, and the candidate's defense-prep checklist.</li>
+<li><strong>Figures</strong> regenerate from data (<span class="mono">figures/make_figures.py</span>); annotations
+are computed, never typed.</li>
+</ul>
+</div>
+</div>
+
+<h2>6 &nbsp;Adversarial review architecture (round 3)</h2>
+<p>After two human rejections, the submission was audited the way it audits the intern — a deterministic
+multi-agent workflow:</p>
+<div class="flow">
+  <div class="box"><span class="tag t-green">Review</span><strong>9 independent lenses</strong><br>
+  rubric grader · tokenizer expert · statistician · serving-infra staff · defense interrogator · forensic numbers
+  auditor · code reviewer · engineering bar-raiser · Part C lead — each reads the actual repo.</div>
+  <div class="arrow">→</div>
+  <div class="box"><span class="tag t-green">Merge</span><strong>Consolidation</strong><br>
+  50 raw findings → 31 unique (max severity kept; independent-flag count preserved as signal).</div>
+  <div class="arrow">→</div>
+  <div class="box"><span class="tag t-green">Verify</span><strong>Adversarial gate</strong><br>
+  Every critical/major finding attacked by two lenses (factual accuracy · materiality at a staff bar);
+  30 survived, 1 refuted.</div>
+  <div class="arrow">→</div>
+  <div class="box"><span class="tag t-green">Fix</span><strong>Close the loop</strong><br>
+  All 30 fixed; harness extended 40 → 50 checks; full re-verification green; committed &amp; pushed.</div>
+</div>
+<p>59 agents, ~3.3M tokens, 784 tool calls. The findings and their fixes are themselves documented evidence
+(<span class="mono">docs/INCIDENTS.pdf</span>, NOTEBOOK round 3).</p>
+
+<h2>7 &nbsp;Repository map</h2>
+<pre>submission/
+  REPORT_v1.md            the product: corrected report for the leadership deck (figures/)
+  verify.py               numbers-under-test harness — 50 assertions; defense entry point
+  _paths.py               starter-kit resolver (env var / both zip nestings, fail-fast)
+  NOTEBOOK.md · AI_USAGE.md · requirements.txt
+  partA/  audit/ (repro, one-toggle experiments, findings, romanization)  corpus/ (builder, card, 7 hash-pinned files)
+          fertility_v1.py (5 tokenizers × 4 denominators, CIs, unk%)  results/  memo.md
+  partB/  kv_math.py · reconcile.py (13-row replay + roofline) · capacity.md
+  partC/  memo.md         casual-tone decision memo (tie-proof gates, kill criteria)
+docs/     ARCHITECTURE.pdf · INSTRUCTIONS.pdf · INCIDENTS.pdf (+ HTML sources, regeneration script)
+.github/workflows/verify.yml · ARCHITECTURE.md · README.md · starter_kit/ (audited inputs)</pre>
+
+<p class="meta">Generated from the repository at commit history head · all numbers in this document are asserted by
+<span class="mono">python submission/verify.py</span> (ALL 50 NUMBERS VERIFIED).</p>
+</body></html>

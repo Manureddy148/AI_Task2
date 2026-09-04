@@ -1,0 +1,86 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>The Audit — Instructions &amp; Defense Runbook</title>
+<link rel="stylesheet" href="style.css"></head>
+<body>
+
+<h1>Instructions &amp; Defense Runbook</h1>
+<p class="sub">How to set up, verify, regenerate, and defend every number in the submission &nbsp;·&nbsp;
+repo: <span class="mono">github.com/Manureddy148/AI_Task2</span> &nbsp;·&nbsp; 2026-08-31</p>
+
+<h2>1 &nbsp;Setup</h2>
+<pre>git clone https://github.com/Manureddy148/AI_Task2.git &amp;&amp; cd AI_Task2
+pip install -r submission/requirements.txt        # Python 3.10+; no torch, no GPU</pre>
+<p>Network is needed once: tokenizer files (tiktoken/HuggingFace) and, only if you rebuild the corpus, the public
+FLORES-200 tarball (24 MB). <strong>Layout:</strong> scripts find the audited inputs via
+<span class="mono">submission/_paths.py</span> — the committed <span class="mono">starter_kit/</span> works as-is;
+any other layout: set <span class="mono">STARTER_KIT=&lt;path containing bench/&gt;</span>.</p>
+
+<h2>2 &nbsp;Verify first (the 30-second credibility check)</h2>
+<pre>python submission/verify.py            # expected final line:  ALL 50 NUMBERS VERIFIED
+python submission/verify.py --full     # also regenerates results/romanization/reconcile first (~3 min)</pre>
+<p>The 50 assertions cover: byte-exact REPORT_v0 reproduction, each bug's isolated delta, corpus SHA-256 pins,
+the full parity grid, every derived ratio quoted in prose, romanization on both tokenizer generations, all 13
+bench-log reconciliations, and the roofline fit. CI runs the same harness on every push.</p>
+
+<h2>3 &nbsp;Regenerate everything from scratch</h2>
+<pre>python submission/partA/corpus/build_corpus.py     # corpus (downloads on first run; hash-pinned)
+python submission/partA/audit/experiments.py       # A2 one-toggle bug isolation
+python submission/partA/fertility_v1.py            # A3 grid: 5 tokenizers × 4 denominators × 7 languages
+python submission/partA/audit/romanization.py      # romanization + Tamil artifact bound + probes
+python submission/partB/kv_math.py                 # B1 arithmetic
+python submission/partB/reconcile.py               # 13-row replay, goodput, roofline, fp8 forecast
+python submission/figures/make_figures.py          # report figures (annotations computed from data)
+python submission/verify.py                        # assert it all again</pre>
+
+<h2>4 &nbsp;Live-defense overrides ("change this input right now")</h2>
+<table>
+<tr><th style="width:34%">Ask</th><th>Command</th></tr>
+<tr><td>Paste a modified toy corpus into A2</td><td><span class="mono">python submission/partA/audit/experiments.py --hin pasted.txt</span> — every variant, the data facts and the bootstrap CI move with it (sizes are derived, not hardcoded).</td></tr>
+<tr><td>Swap one language's file in A3</td><td><span class="mono">python submission/partA/fertility_v1.py --corpus hin=pasted.txt</span> (repeatable; line-alignment with eng is asserted with a clear error).</td></tr>
+<tr><td>Point Part B at an edited bench log</td><td><span class="mono">python submission/partB/reconcile.py --log edited.csv</span> — all seven sections recompute; row binding is unique-match asserted.</td></tr>
+<tr><td>Change a spec constant</td><td>Edit the constant in <span class="mono">kv_math.py</span> — every printed equation string is an f-string over the constants; nothing numeric is retyped literal text.</td></tr>
+<tr><td>Different starter-kit location</td><td><span class="mono">STARTER_KIT=&lt;path&gt;</span> env var.</td></tr>
+</table>
+
+<h2>5 &nbsp;Defense crib — the numbers and where each one lives</h2>
+<table>
+<tr><th style="width:26%">Number</th><th style="width:40%">Derivation</th><th>Source of truth</th></tr>
+<tr><td>114,688 B/token KV (112 KiB)</td><td>2 (K,V) × 28 layers × 8 KV heads × 128 head_dim × 2 B fp16</td><td>partB/kv_math.py</td></tr>
+<tr><td>25.7 → ~25 concurrent 4k seqs</td><td>(0.92·24 − 8.4 − 1.6) GB ÷ (4096 × 114,688 B)</td><td>kv_math.py; log confirms: util 0.93@24, preempt 7=32−25, 23=48−25</td></tr>
+<tr><td>201 tok/s honest goodput</td><td>512·24/61.16 by definition; independent route n/itl = 249.8 tok/s over the 49.1 s decode phase; counter/8 is an identity, not evidence</td><td>reconcile.py §3; capacity.md B3</td></tr>
+<tr><td>65% MBU roofline</td><td>itl = (8.4 GB + resident·avg_ctx·112 KiB)/(0.65·300 GB/s) fits 13/13 ITLs ±2.8%; compute 1.7 ms vs 63 ms memory → memory-bound 40×</td><td>reconcile.py §6</td></tr>
+<tr><td>Parity: hin 7.42× · kan 13.59× · tam 15.54× · tel 12.97× · ben 9.61× · mar 7.86×</td><td>total tokens ÷ English tokens over the same 1012 parallel sentences (gpt2 = v0's tokenizer); CIs ≤ ±1.28%</td><td>partA/results/results.csv; fig1</td></tr>
+<tr><td>MuRIL 1.00–1.20×</td><td>Same corpus, Indic-focused vocab; unk ≤ 0.38% (integrity column)</td><td>results.csv</td></tr>
+<tr><td>Romanized hin 2.25× (gpt2) / 1.87× (o200k)</td><td>IAST-derived chat approximation; organic-convention probe 2.11/1.76; Tamil is a range 2.37–3.09× (aspirate artifact bound)</td><td>partA/audit/romanization_output.md</td></tr>
+<tr><td>Bug deltas +0.59 / +2.92 / +0.35%</td><td>one-toggle isolation vs byte-exact v0 baseline 5.8871×</td><td>partA/audit/experiment_output.md</td></tr>
+</table>
+
+<h2>6 &nbsp;The five hardest defense questions — and where the answer is</h2>
+<ul>
+<li><strong>"Why is tokens-per-word wrong? It's the standard fertility metric."</strong> Fine <em>within</em> a
+language; across languages it errs −15% (hin) to +36% (kan) against content-constant truth because words carry
+different content per language — findings.md C1 table, derived from results.csv.</li>
+<li><strong>"Your two metrics agreed — doesn't that confirm the result?"</strong> Shared numerator ⇒ correlation by
+construction; the repo shows the same tokens giving 6.34× / 11.39× / 2.90× / 7.46× under four denominators —
+findings.md C2. (And the audit applied this to itself: see B3's relabelled "identity".)</li>
+<li><strong>"Is 7.4× what production pays?"</strong> Unknown — the spec's 128k vocab is not gpt2; the premium is
+bracketed (cl100k row is scale-illustration) until recommendation 6 measures the real tokenizer. REPORT_v1 §4.</li>
+<li><strong>"Why does throughput fall at batch 32?"</strong> 448 MiB/seq × 32 &gt; 12.08 GB budget → 7 evictions with
+full re-prefill (~3.5 s trigger) + serialized tail past the 25-slot ceiling; util pegs at 0.97 — capacity.md B2,
+every column reconciled.</li>
+<li><strong>"What would falsify your fixes?"</strong> Stated in advance: max_num_seqs=24 → 122.3 s / 0 preemptions at
+offered 48; fp8-KV → 51 slots, ~2× decode (capacity half is arithmetic-certain, ITL half assumes MBU transfers);
+counter to pull: vllm:num_preemptions_total ≥7/≥23 — capacity.md B2/B4.</li>
+</ul>
+
+<h2>7 &nbsp;Troubleshooting</h2>
+<ul>
+<li><strong>HF rate-limit warning</strong> on first tokenizer download is benign; set <span class="mono">HF_TOKEN</span> to silence.</li>
+<li><strong>Corpus hash FAIL after a fresh clone</strong> would mean newline translation — the repo ships
+<span class="mono">.gitattributes * -text</span> precisely to prevent it; check that file survived any re-zip.</li>
+<li><strong>verify.py --full failure</strong>: the failing child's stderr prints through (stdout is suppressed); fix the cause it names.</li>
+<li>Windows/macOS/Linux all fine; everything is CPU-only.</li>
+</ul>
+
+<p class="meta">Regenerate these PDFs: <span class="mono">powershell docs/make_pdfs.ps1</span> (headless Edge/Chromium print of docs/src/*.html).</p>
+</body></html>

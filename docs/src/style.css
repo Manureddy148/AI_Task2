@@ -1,0 +1,33 @@
+@page { size: A4; margin: 18mm 16mm; }
+* { box-sizing: border-box; }
+body { font-family: "Segoe UI", system-ui, sans-serif; color: #1a1a1a; font-size: 10.5pt;
+       line-height: 1.5; margin: 0; }
+h1 { font-size: 20pt; margin: 0 0 2px; letter-spacing: -0.3px; }
+h2 { font-size: 13pt; margin: 18px 0 6px; padding-bottom: 3px; border-bottom: 1.5px solid #d8d6cf; }
+h3 { font-size: 11pt; margin: 12px 0 4px; }
+p { margin: 5px 0; }
+.sub { color: #52514e; font-size: 10pt; margin-bottom: 14px; }
+.meta { color: #6b6a66; font-size: 8.5pt; border-top: 1px solid #e1e0d9; margin-top: 10px; padding-top: 4px; }
+table { border-collapse: collapse; width: 100%; margin: 8px 0; font-size: 9.5pt; }
+th, td { border: 1px solid #d8d6cf; padding: 4px 7px; text-align: left; vertical-align: top; }
+th { background: #f4f3ef; font-weight: 600; }
+code, .mono { font-family: Consolas, "Cascadia Mono", monospace; font-size: 9pt;
+              background: #f4f3ef; padding: 0 3px; border-radius: 3px; }
+pre { font-family: Consolas, "Cascadia Mono", monospace; font-size: 8.8pt; background: #f7f6f3;
+      border: 1px solid #e1e0d9; border-radius: 5px; padding: 8px 10px; overflow-x: hidden;
+      white-space: pre-wrap; line-height: 1.4; }
+.box { border: 1.2px solid #b9b7ae; border-radius: 6px; padding: 7px 10px; background: #fbfaf8; }
+.flow { display: flex; gap: 8px; align-items: stretch; margin: 8px 0; }
+.flow .box { flex: 1; font-size: 9pt; }
+.arrow { align-self: center; color: #8a8880; font-size: 13pt; }
+.tag { display: inline-block; font-size: 8pt; font-weight: 600; letter-spacing: 0.4px;
+       text-transform: uppercase; color: #fff; border-radius: 3px; padding: 1px 6px; margin-right: 5px; }
+.t-blue { background: #2a78d6; } .t-orange { background: #d95926; } .t-green { background: #0a7f3f; }
+.t-gray { background: #6b6a66; }
+ul { margin: 5px 0 5px 20px; padding: 0; }
+li { margin: 3px 0; }
+.cols { display: flex; gap: 16px; }
+.cols > div { flex: 1; }
+img.fig { width: 100%; border: 1px solid #e1e0d9; border-radius: 5px; margin: 6px 0; }
+.pagebreak { break-before: page; }
+strong { font-weight: 600; }
