@@ -286,3 +286,8 @@ every number in the PDFs traces to a repo artifact:
   two rejections triggered rounds 2 and 3.
 * Housekeeping: `starter_kit (1).zip` renamed to `starter_kit_original.zip`
   (provenance of the audited inputs); drill script and this entry committed.
+* **~18:00 — drill executed, transcript committed.** `defense_drill.py` run
+  end-to-end through its interactive path (piped Enter): all five verifiable
+  steps matched expected vs actual (`drill_transcript.txt`); AI_USAGE checklist
+  updated to state precisely who executed what. The one box left open is the
+  candidate's own read of REPORT_v1 — by design, that one cannot be delegated.

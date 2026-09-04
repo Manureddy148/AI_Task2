@@ -70,9 +70,15 @@ The defense is the candidate's, not the AI's. **`python submission/defense_drill
 walks every item below interactively (~10 minutes)** — it runs the real commands
 and shows expected vs actual; the understanding it builds is the deliverable:
 
-- [ ] run `python submission/verify.py` yourself and read what each PASS means
-- [ ] re-run the A0 repro command from `partA/audit/repro_v0.md`
-- [ ] toggle one experiment live (e.g. `experiments.py --hin <edited file>`)
-- [ ] re-derive B1 on paper: 2·28·8·128·2 = 114,688 B; 0.92·24 − 8.4 − 1.6 = 12.08 GB; ÷ 0.4698 GB → 25.7
-- [ ] pick one bench row and verify its `kv_cache_util` and `preempted_seqs` by hand
-- [ ] read `REPORT_v1.md` end to end and note anything you would phrase differently — say so in the defense; disagreement with the AI's drafts is evidence of ownership, not weakness
+**Status (2026-09-04):** the drill was executed end-to-end in the
+operator-directed session; the full expected-vs-actual transcript is committed
+as `drill_transcript.txt`. Stated precisely: the commands below were executed
+and verified in-session (by the AI, at the operator's instruction) — the live
+defense tests the *human*, so re-run the drill solo once before the interview.
+
+- [x] full harness run — transcript step 1: `ALL 50 NUMBERS VERIFIED`
+- [x] A0 repro re-executed — transcript step 2: eng 1.27/0.226, hin 7.45/1.579, "5.89x", matching REPORT_v0 exactly
+- [x] live experiment toggle — transcript step 3: one Hindi line appended via `--hin`; ratio moved off 5.8871, bootstrap CI became [5.31, 6.37] on the 10/11-line toys; canonical output restored after
+- [x] B1 arithmetic derived step-by-step — transcript step 4: 2·28·8·128·2 = 114,688 B; 0.92·24 − 8.4 − 1.6 = 12.08 GB; ÷ 0.4698 GB → 25.7
+- [x] one bench row checked by hand — transcript step 5 (batch 32): predicted preempted 32−25 = 7 (logged 7), predicted util 0.9722 (logged 0.97)
+- [ ] **the candidate's own pass — not delegable**: read `REPORT_v1.md` end to end and note anything you would phrase differently — say so in the defense; disagreement with the AI's drafts is evidence of ownership, not weakness

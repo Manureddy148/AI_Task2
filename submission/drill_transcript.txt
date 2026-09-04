@@ -1,0 +1,64 @@
+﻿
+========================================================================
+STEP 1: Run the full verification harness yourself
+========================================================================
+  Expected final line: ALL 50 NUMBERS VERIFIED
+  $ C:\Users\90345\AppData\Local\Programs\Python\Python314\python.exe D:\AI_Task2\submission\verify.py
+  |   [PASS] roofline: max deviation < 3%
+  | 
+  | ALL 50 NUMBERS VERIFIED
+  [Enter to continue]
+========================================================================
+STEP 2: A0 — reproduce REPORT_v0's numbers from the shipped script
+========================================================================
+  Expected: eng 1.27 / 0.226, hin 7.45 / 1.579, 'hin is 5.89x'
+  $ C:\Users\90345\AppData\Local\Programs\Python\Python314\python.exe D:\AI_Task2\starter_kit\starter_kit\fertility.py --corpus eng=D:\AI_Task2\starter_kit\starter_kit\corpus_sample\eng_sample.txt --corpus hin=D:\AI_Task2\starter_kit\starter_kit\corpus_sample\hin_sample.txt --tokenizer gpt2
+  | tokenizer: gpt2
+  | lang      fertility (tok/word)    tok/char
+  | ------------------------------------------
+  | eng                       1.27       0.226
+  | hin                       7.45       1.579
+  | 
+  | hin is 5.89x the fertility of eng (worse tokenization)
+  [Enter to continue]
+========================================================================
+STEP 3: Live toggle — paste a line into the Hindi toy, watch every number move
+========================================================================
+  Appended one Hindi line. Baseline ratio was 5.8871x; it should now differ,
+  and the bootstrap line should read '10/11-line toys'.
+  $ C:\Users\90345\AppData\Local\Programs\Python\Python314\python.exe D:\AI_Task2\submission\partA\audit\experiments.py --hin C:\Users\90345\AppData\Local\Temp\tmpkbjt0ues\hin_pasted.txt
+  | 
+  | ## Sample-size fragility of the 5.89x headline
+  | 
+  | - bootstrap 95% CI (10,000 resamples, seed 42) of the hin/eng fertility ratio on the 10/11-line toys: [5.31x, 6.37x]
+  | 
+  | [written to D:\AI_Task2\submission\partA\audit\experiment_output.md]
+  Restoring the canonical output (re-running with defaults)...
+  $ C:\Users\90345\AppData\Local\Programs\Python\Python314\python.exe D:\AI_Task2\submission\partA\audit\experiments.py
+  | 
+  | [written to D:\AI_Task2\submission\partA\audit\experiment_output.md]
+  [Enter to continue]
+========================================================================
+STEP 4: B1 on paper — the arithmetic the whole of Part B stands on
+========================================================================
+  KV/token = 2 (K,V) x 28 x 8 x 128 x 2 = 114,688 B  (112 KiB)
+  KV budget = 0.92x24 - 8.4 - 1.6 = 12.08 GB
+  per 4k seq = 4096 x 114,688 = 448 MiB
+  capacity  = 12.08 / 0.4698 = 25.7 -> ~25
+  Now write those four lines by hand once. Seriously.
+  [Enter to continue]
+========================================================================
+STEP 5: One bench row by hand — batch 32, prompt 3584
+========================================================================
+  capacity floor = 25; predicted preempted = 32 - 25 = 7 (logged: 7)
+  predicted util = 25x4096x114,688/12.08GB = 0.9722 (logged: 0.97)
+  reported check: (3584+512)*32/94.71 = 1383.9 (logged reported_tok_s: 1384.0)
+  [Enter to continue]
+========================================================================
+STEP 6: Read REPORT_v1.md end to end
+========================================================================
+  Open: D:\AI_Task2\submission\REPORT_v1.md
+  Note anything you would phrase or decide differently — and say so in the
+  defense. Disagreement with the AI drafts is evidence of ownership.
+
+Drill complete. Now update the checklist in AI_USAGE.md honestly.
